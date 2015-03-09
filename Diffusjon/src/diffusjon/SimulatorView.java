@@ -6,7 +6,13 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import static java.awt.PageAttributes.ColorType.COLOR;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -55,13 +61,17 @@ public class SimulatorView extends JFrame{
                 }
             }
          }
+        
         for (int ax = 0; ax < system.getX(); ax++) {
             for (int ay = 0; ay < system.getY(); ay++) {
                 for (int az = 0; az < system.getZ(); az++) {
-                    Object particle = system.getObjectAt(ax, ay, az);
-                    if (particle != null) {
-                        System.out.println("found part");
-                        loco.drawMark(ax, ay, az); 
+                    Particle particle = system.getObjectAt(ax, ay, az);
+                    if (particle == null) {
+                        //loco.drawEmpty(ax, ay, az);   
+                    }
+                    else {
+                        int n = particle.getColorIdentifier();
+                        loco.drawMark(ax, ay, az, n);
                     }
                 }
             }
@@ -91,15 +101,24 @@ public class SimulatorView extends JFrame{
     
     public class systemView extends JPanel {
         
-        private Image systemFront;
-        private Image systemAbove;
+        private Image underLine, yLine, zLine, systemAbove, systemFront;
         private Graphics g;
-        private int xScale = 3;
-        private int yScale = 3;
-        private int zScale = 3;
+        private int xScale = 5;
+        private int yScale = 5;
+        private int zScale = 5;
         
         public systemView(int height, int width) {
-            
+            loadContent();
+        }
+        
+        private void loadContent() {
+            try {
+                underLine = ImageIO.read(new File("graphics/line.png"));
+                yLine = ImageIO.read(new File("graphics/yline.png"));
+                zLine = ImageIO.read(new File("graphics/zline.png"));
+            } catch (IOException ex) {
+                
+            }
         }
         
         public void preparePaint() {
@@ -108,23 +127,47 @@ public class SimulatorView extends JFrame{
             g = systemFront.getGraphics();
         }
         
-            public void drawMark(int x, int y, int z) {
-            Color color = new Color(25, 25, 25);    
-            g.setColor(color);
-            g.fillRect(50 + (x * xScale), y * yScale, xScale - 1, yScale - 1);
-            g.fillRect(400 + (x * xScale), z * zScale, xScale - 1, zScale - 1);
+            public void drawMark(int x, int y, int z, int n) {
+            Color colorA = null;
+            Color colorB = null;
+            if(n == 0) {    
+                colorA = new Color(255 - (3*z), 0, 0);
+                colorB = new Color(255 - (3*y), 0, 0);
+            }
+            else if (n == 1) {
+                colorA = new Color(0, 255 - (3*z), 0);
+                colorB = new Color(0, 255 - (3*y), 0);
+            }
+            else if (n == 2) {
+                colorA = new Color(255 - (3*z), 0, 255 - (3*z));
+                colorB = new Color(255 - (3*y), 0, 255 - (3*y));
+            }
+            else if (n == 3) {
+                colorA = new Color(0, 255 - (3*z), 255 - (3*z));
+                colorB = new Color(0, 255 - (3*y), 255 - (3*y));
+            }
+            g.setColor(colorA);
+            g.fillRect(50 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
+            g.setColor(colorB);
+            g.fillRect(400 + (x * xScale), z * zScale, xScale - 0, zScale - 0);
+            //g.fillRect(400 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
         }
             
             public void drawEmpty(int x, int y, int z) {
-                Color color = new Color(0, 255, 0);    
+                Color color = new Color(0, 0, 51);    
                 g.setColor(color);
-                g.fillRect(50 + (x * xScale), y * yScale, xScale - 1, yScale - 1);
-                g.fillRect(400 + (x * xScale), z * zScale, xScale - 1, zScale - 1);       
+                g.fillRect(50 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
+                g.fillRect(400 + (x * xScale), z * zScale, xScale - 0, zScale - 0);       
             }
             
          public void paintComponent(Graphics g) {
             if (systemFront != null && systemAbove != null) {
                     g.drawImage(systemFront, 0, 50, null);
+                    g.drawImage(underLine, 50, 355, null);
+                    g.drawImage(underLine, 400, 355, null);
+                    g.drawImage(yLine, 25, 50, null);
+                    g.drawImage(zLine, 375, 50, null);
+                    
             }
         }
     }
