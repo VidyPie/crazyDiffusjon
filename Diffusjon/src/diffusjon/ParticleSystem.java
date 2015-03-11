@@ -17,12 +17,12 @@ public class ParticleSystem
 {
     private int xsize, ysize;
     private Particle[][] system;
-
+    private HashMap<Location, Particle> p;
     public ParticleSystem(int x, int y)
     {
         this.xsize = x;
         this.ysize = y;
-        HashMap<Location, Particle> p;
+        p = new HashMap<Location, Particle>();
         system = new Particle[x][y];
     }
     
@@ -32,6 +32,7 @@ public class ParticleSystem
             for(int ay = 0; ay < ysize; ay++) {
 
                     system[ax][ay] = null;
+                    p.clear();
                 
             }
         }
@@ -49,6 +50,7 @@ public class ParticleSystem
  
     public void place(Particle particle, Location location) {
             system[location.getX()][location.getY()] = particle;
+            p.put(location, particle);
     }
 
     public Particle getObjectAt(Location location)

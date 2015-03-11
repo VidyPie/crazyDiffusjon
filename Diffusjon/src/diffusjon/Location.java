@@ -1,5 +1,10 @@
 package diffusjon;
 
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Represent a location in a 3-dimensional coordinate system
  * 
@@ -11,11 +16,14 @@ public class Location
 
     private int x;
     private int y;
+    private int actualPop;
+    private List<Location> adjacentLocations; 
 
     public Location(int x, int y)
     {
         this.x = x;
         this.y = y;
+        
     }
     
     /**
@@ -27,7 +35,23 @@ public class Location
         return x + "," + y;
     }
    
+    public void steinLoop() {
+        Random r = new Random();
+        double pop = actualPop;
+        for(Iterator<Location> it = adjacentLocations.iterator(); it.hasNext();) {
+        double stddev = Math.sqrt(pop * 0.125d * 0.875d);
+        System.out.println("Standard deviation is: " + stddev);
+        double mean = pop*0.125d;
+        System.out.println("Mean is: " + mean);
+        int moved = (int) (r.nextGaussian()*stddev+mean);
+        System.out.println("Moved: " + moved);
+        pop = pop - moved;
+        }
+    }
     
+    public void addList(List<Location> adjacentLocationsNew) {
+        adjacentLocations = adjacentLocationsNew;
+    }
     /**
      * @return The row.
      */
@@ -39,6 +63,14 @@ public class Location
     public int getY()
     {
         return y;
+    }
+    
+    public void placeParticle() {
+        actualPop = actualPop + 1;
+    }
+    
+    public void removeParticle() {
+        actualPop = actualPop - 1;
     }
     
     

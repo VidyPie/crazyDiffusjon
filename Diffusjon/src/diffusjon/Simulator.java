@@ -27,6 +27,7 @@ public class Simulator {
     private int nValue;
     private int l;
     private int m = 0;
+    private int stateConst;
     private int partCount;
     private long lastStep;
     private long speed = 20;
@@ -59,7 +60,7 @@ public class Simulator {
                         //step++;
                         lastStep = System.currentTimeMillis();
                     }
-                    if(step >= nValue) {
+                    if (step >= nValue) {
                         simState = SimState.WAITING;
                     }
                     break;
@@ -79,10 +80,10 @@ public class Simulator {
             JTextField difField = new JTextField(4);
             JTextField parField = new JTextField(4);
             JPanel myPanel = new JPanel();
-            myPanel.add(new JLabel("Steg:"));
+            myPanel.add(new JLabel("Steps:"));
             myPanel.add(difField);
             myPanel.add(Box.createHorizontalStrut(30)); // a spacer
-            myPanel.add(new JLabel("Partikler:"));
+            myPanel.add(new JLabel("Particles:"));
             myPanel.add(parField);
             int result = JOptionPane.showConfirmDialog(null, myPanel, "Please Enter nValue", JOptionPane.OK_CANCEL_OPTION);
             nValue = Integer.parseInt(difField.getText());
@@ -93,7 +94,7 @@ public class Simulator {
             int result = JOptionPane.showConfirmDialog(null, "Make sure all values are numbers", "CRITICAL ERROR", JOptionPane.OK_CANCEL_OPTION);
             //customStart();
         }
-        
+
     }
 
     private void simulateOneStep() {
@@ -110,7 +111,7 @@ public class Simulator {
         }
         particles.addAll(newParticles);
         view.prepareSystem(step, system);
-        view.showStatus(step, system);
+        view.showStatus(step, system, stateConst);
         step++;
     }
 
@@ -121,10 +122,8 @@ public class Simulator {
     private void layoutMenu() {
         //menu.setLayout(null);
         JButton startButton = new JButton("START");
-        JButton pauseButton = new JButton("PAUSE");
-        JButton resumeButton = new JButton("RESUME");
-        JButton resetButton = new JButton("RESET");
         JButton exitButton = new JButton("EXIT");
+        JButton stopButton = new JButton("STOP");
         JButton agentButton = new JButton("AGENT");
         JButton cellButton = new JButton("CELLULAR");
         JButton singleButton = new JButton("SINGLE");
@@ -134,6 +133,8 @@ public class Simulator {
                 System.out.println("You clicked START");
                 if (simState == SimState.READY) {
                     //start();
+                    view.addToMenu(stopButton);
+                    view.removeButton(startButton);
                     simState = SimState.RUNNING;
                 } else {
 
@@ -141,22 +142,9 @@ public class Simulator {
                 }
             }
         });
-        pauseButton.addActionListener((ActionEvent e) -> {
-            System.out.println("You clicked PAUSE");
-            if (simState != SimState.READY) {
-                view.removeButton(pauseButton);
-                view.addToMenu(resumeButton);
-                simState = SimState.PAUSE;
-            }
-        });
-        resumeButton.addActionListener((ActionEvent e) -> {
-            System.out.println("You clicked RESUME");
-            view.removeButton(resumeButton);
-            view.addToMenu(pauseButton);
-            simState = SimState.RUNNING;
-        });
         agentButton.addActionListener((ActionEvent e) -> {
             if (simState != SimState.RUNNING) {
+                stateConst = 1;
                 start();
                 simState = SimState.READY;
             }
@@ -164,36 +152,31 @@ public class Simulator {
         cellButton.addActionListener((ActionEvent e) -> {
 
         });
-        singleButton.addActionListener((ActionEvent e) -> {
-
+        stopButton.addActionListener((ActionEvent e) -> {
+            simState = SimState.WAITING;
+            view.addToMenu(startButton);
+            view.removeButton(stopButton);
         });
-        resetButton.addActionListener((ActionEvent e) -> {
-            System.out.println("You clicked RESET");
-            if (simState != SimState.RUNNING) {
-                view.removeButton(resumeButton);
-                view.addToMenu(pauseButton);
-                reset();
-                simState = simState.READY;
-            } else {
-                int result = JOptionPane.showConfirmDialog(null, "Pause the simulation first", "CRITICAL ERROR", JOptionPane.CLOSED_OPTION);
-            }
+        singleButton.addActionListener((ActionEvent e) -> {
+            partCount = 1;
+            stateConst = 2;
+            nValue = 10000;
+            view.clearVisitedLocations();
+            reset();
+            populate();
+            simState = SimState.READY;
         });
         exitButton.addActionListener((ActionEvent e) -> {
             System.out.println("You clicked EXIT");
             exit();
         });
         startButton.setBounds(10, 10, 90, 30);
-        pauseButton.setBounds(10, 45, 90, 30);
-        resumeButton.setBounds(10, 45, 90, 30);
-        resetButton.setBounds(10, 80, 90, 30);
+        stopButton.setBounds(10, 10, 90, 30);
         exitButton.setBounds(10, 115, 90, 30);
         agentButton.setBounds(10, 165, 90, 30);
         cellButton.setBounds(10, 200, 90, 30);
         singleButton.setBounds(10, 235, 90, 30);
         view.addToMenu(startButton);
-        view.addToMenu(pauseButton);
-        view.addToMenu(resetButton);
-        view.addToMenu(exitButton);
         view.addToMenu(agentButton);
         view.addToMenu(cellButton);
         view.addToMenu(singleButton);
@@ -228,7 +211,7 @@ public class Simulator {
             }
         }
         view.prepareSystem(step, system);
-        view.showStatus(step, system);
+        view.showStatus(step, system, stateConst);
     }
 
 }
