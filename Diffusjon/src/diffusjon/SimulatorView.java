@@ -99,8 +99,8 @@ public class SimulatorView extends JFrame {
 
         private Image underLine, yLine, systemFront;
         private Graphics g;
-        private int xScale = 2;
-        private int yScale = 2;
+        private int xScale = 3;
+        private int yScale = 3;
 
         public systemView(int height, int width) {
             loadContent();
@@ -124,9 +124,8 @@ public class SimulatorView extends JFrame {
         public void drawMark(int x, int y) {
             Color colorA = new Color(200, 0, 0);
             Color colorB = null;
-            System.out.println("hey");
             g.setColor(colorA);
-            g.fillRect(100 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
+            g.fillRect(100 + (x * xScale), y * yScale, xScale - 1, yScale - 1);
             //g.fillRect(400 + (x * xScale), xScale - 0);
             //g.fillRect(400 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
         }
@@ -134,7 +133,7 @@ public class SimulatorView extends JFrame {
         public void drawEmpty(int x, int y) {
             Color color = new Color(255,255,255);
             g.setColor(color);
-                g.fillRect(100 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
+                g.fillRect(100 + (x * xScale), y * yScale, xScale - 1, yScale - 1);
             //g.fillRect(400 + (x * xScale), z * zScale, xScale - 0, zScale - 0);       
         }
 
@@ -143,9 +142,7 @@ public class SimulatorView extends JFrame {
                 g.drawImage(systemFront, 0, 50, null);
                 //g.drawImage(underLine, 50, 355, null);
                 //g.drawImage(yLine, 25, 50, null);
-                System.out.println("dsf");
             }
-            System.out.println("dsf");
         }
     }
 }

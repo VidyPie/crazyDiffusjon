@@ -64,10 +64,14 @@ public class ParticleSystem
     public Location randomAdjacentLocation(Location location)
     {
         List<Location> adjacent = adjacentLocations(location);
-        int v = adjacent.size();
+        //int v = adjacent.size();
         Random r = new Random();
-        int u = r.nextInt(v);
-        return adjacent.get(u);
+        int u = r.nextInt(9);
+        try {
+            return adjacent.get(u);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
     
     public List<Location> getFreeAdjacentLocations(Location location)

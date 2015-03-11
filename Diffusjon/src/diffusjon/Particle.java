@@ -30,20 +30,25 @@ public class Particle {
          location = newLocation;
     }
     
-    public void act(List<Particle> newParticles) {
+    public int act(List<Particle> newParticles) {
         Location newLocation = system.randomAdjacentLocation(location);
+        int returnN = 0;
         if (newLocation == null) {
             System.out.println("ohno");
+            return 1;
         }
         oldX = location.getX();
         oldY = location.getY();
         
         setLocation(newLocation);
+        return 0;
+        
     }
     
-    public void act2(List<Particle> newParticles) { 
+    public int act2(List<Particle> newParticles) { 
         int x = location.getX();
         int y = location.getY();
+        int returnN = 0;
         Random r = new Random();
         int i = r.nextInt(4);
         if(i == 0 || i == 2) {
@@ -53,9 +58,11 @@ public class Particle {
         }
         if(x > 239) {
             x = 239;
+            returnN = 1;
         }
         if (x < 0) {
             x = 0;
+            returnN = 1;
         }
         int u = r.nextInt(2);
         if(u == 0){
@@ -66,12 +73,15 @@ public class Particle {
         }
         if (y <= 0) {
             y = 0;
+            returnN = 1;
         }
         if(y >= 239) {
             y = 239;
+            returnN = 1;
         }
         Location newLocation = new Location(x, y);
         setLocation(newLocation);
+        return returnN;
     
     }
     
