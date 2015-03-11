@@ -101,7 +101,7 @@ public class SimulatorView extends JFrame {
                 loco.drawVisitedMark(location.getX(), location.getY());
             }
         }
-        if(stateConst == 3) {
+        if (stateConst == 3) {
             for (int ax = 0; ax < system.getX(); ax++) {
                 for (int ay = 0; ay < system.getY(); ay++) {
                     Particle particle = system.getObjectAt(ax, ay);
@@ -193,16 +193,16 @@ public class SimulatorView extends JFrame {
                 //g.drawImage(underLine, 50, 355, null);
                 //g.drawImage(yLine, 25, 50, null);
                 Point2D.Double P1 = new Point2D.Double(50, 75); // Start Point
-    Point2D.Double P2 = new Point2D.Double(150, 75); // End Point
+                Point2D.Double P2 = new Point2D.Double(150, 75); // End Point
 
-        Point2D.Double ctrl1 = new Point2D.Double(80, 25); // Control Point 1
-        Point2D.Double ctrl2 = new Point2D.Double(160, 100); // Control Point 2
-         
-        CubicCurve2D.Double cubicCurve; // Cubic curve
- 
-        cubicCurve = new CubicCurve2D.Double(P1.x, P1.y, ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, P2.x, P2.y);
-        Graphics2D g2 = (Graphics2D)g;
-        g2.draw(cubicCurve);
+                Point2D.Double ctrl1 = new Point2D.Double(80, 25); // Control Point 1
+                Point2D.Double ctrl2 = new Point2D.Double(160, 100); // Control Point 2
+
+                CubicCurve2D.Double cubicCurve; // Cubic curve
+                System.out.println("");
+                cubicCurve = new CubicCurve2D.Double(P1.x, P1.y, ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, P2.x, P2.y);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.draw(cubicCurve);
 
             }
         }

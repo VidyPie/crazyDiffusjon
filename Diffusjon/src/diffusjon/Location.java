@@ -35,14 +35,16 @@ public class Location {
     public void steinLoop() {
         Random r = new Random();
         double pop = actualPop;
+        double leftLoc = 8;
         for (Iterator<Location> it = adjacentLocations.iterator(); it.hasNext();) {
-            double stddev = Math.sqrt(pop * 0.125d * 0.875d);
+            double stddev = Math.sqrt(pop * (1/leftLoc) * ((leftLoc - 1)/leftLoc));
             System.out.println("Standard deviation is: " + stddev);
             double mean = pop * 0.125d;
             System.out.println("Mean is: " + mean);
             int moved = (int) (r.nextGaussian() * stddev + mean);
             System.out.println("Moved: " + moved);
             pop = pop - moved;
+            leftLoc = leftLoc - 1;
             actualPop = actualPop - (int)moved;
         }
     }
