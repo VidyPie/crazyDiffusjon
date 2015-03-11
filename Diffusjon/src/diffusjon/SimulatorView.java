@@ -23,12 +23,12 @@ import javax.swing.JSplitPane;
  * @author VidyPie
  * @version 2015.03.04
  */
-public class SimulatorView extends JFrame{
-    
+public class SimulatorView extends JFrame {
+
     private systemView loco;
     private sideMenu menu;
     private JSplitPane splitPane;
-    
+
     public SimulatorView() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(true);
@@ -45,130 +45,107 @@ public class SimulatorView extends JFrame{
         contents.add(splitPane, BorderLayout.CENTER);
         setVisible(true);
     }
-    
+
     public void prepareSystem(int step, ParticleSystem system) {
         if (!isVisible()) {
             setVisible(true);
         }
         loco.preparePaint();
     }
-    
+
     public void showStatus(int step, ParticleSystem system) {
-         for (int aix = 0; aix < system.getX(); aix++) {
+        for (int aix = 0; aix < system.getX(); aix++) {
             for (int aiy = 0; aiy < system.getY(); aiy++) {
-                for (int aiz = 0; aiz < system.getZ(); aiz++) {
-                    loco.drawEmpty(aix, aiy, aiz);
-                }
+                //loco.drawEmpty(aix, aiy);
+
             }
-         }
-        
+        }
+
         for (int ax = 0; ax < system.getX(); ax++) {
             for (int ay = 0; ay < system.getY(); ay++) {
-                for (int az = 0; az < system.getZ(); az++) {
-                    Particle particle = system.getObjectAt(ax, ay, az);
-                    if (particle == null) {
-                        //loco.drawEmpty(ax, ay, az);   
-                    }
-                    else {
-                        int n = particle.getColorIdentifier();
-                        loco.drawMark(ax, ay, az, n);
-                    }
+                Particle particle = system.getObjectAt(ax, ay);
+                if (particle == null) {
+                    loco.drawEmpty(ax, ay);   
+                } else {
+                    loco.drawMark(ax, ay);
+
                 }
             }
         }
         repaint();
     }
-    
+
     public void addToMenu(JButton button) {
         menu.addButton(button);
     }
-    
+
     public void removeButton(JButton button) {
         menu.remove(button);
         menu.repaint();
     }
-    
+
     public class sideMenu extends JPanel {
-        
+
         public sideMenu() {
-            
+
         }
-        
+
         public void addButton(JButton button) {
             menu.add(button);
         }
     }
-    
+
     public class systemView extends JPanel {
-        
-        private Image underLine, yLine, zLine, systemAbove, systemFront;
+
+        private Image underLine, yLine, systemFront;
         private Graphics g;
-        private int xScale = 5;
-        private int yScale = 5;
-        private int zScale = 5;
-        
+        private int xScale = 2;
+        private int yScale = 2;
+
         public systemView(int height, int width) {
             loadContent();
         }
-        
+
         private void loadContent() {
             try {
                 underLine = ImageIO.read(new File("graphics/line.png"));
                 yLine = ImageIO.read(new File("graphics/yline.png"));
-                zLine = ImageIO.read(new File("graphics/zline.png"));
             } catch (IOException ex) {
-                
+
             }
         }
-        
+
         public void preparePaint() {
-            systemFront = loco.createImage(750, 300);
-            systemAbove = loco.createImage(300, 300);
+            systemFront = loco.createImage(750, 600);
             g = systemFront.getGraphics();
+            
         }
-        
-            public void drawMark(int x, int y, int z, int n) {
-            Color colorA = null;
+
+        public void drawMark(int x, int y) {
+            Color colorA = new Color(200, 0, 0);
             Color colorB = null;
-            if(n == 0) {    
-                colorA = new Color(255 - (3*z), 0, 0);
-                colorB = new Color(255 - (3*y), 0, 0);
-            }
-            else if (n == 1) {
-                colorA = new Color(0, 255 - (3*z), 0);
-                colorB = new Color(0, 255 - (3*y), 0);
-            }
-            else if (n == 2) {
-                colorA = new Color(255 - (3*z), 0, 255 - (3*z));
-                colorB = new Color(255 - (3*y), 0, 255 - (3*y));
-            }
-            else if (n == 3) {
-                colorA = new Color(0, 255 - (3*z), 255 - (3*z));
-                colorB = new Color(0, 255 - (3*y), 255 - (3*y));
-            }
+            System.out.println("hey");
             g.setColor(colorA);
-            g.fillRect(50 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
-            g.setColor(colorB);
-            g.fillRect(400 + (x * xScale), z * zScale, xScale - 0, zScale - 0);
+            g.fillRect(100 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
+            //g.fillRect(400 + (x * xScale), xScale - 0);
             //g.fillRect(400 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
         }
-            
-            public void drawEmpty(int x, int y, int z) {
-                Color color = new Color(0, 0, 51);    
-                g.setColor(color);
-                g.fillRect(50 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
-                g.fillRect(400 + (x * xScale), z * zScale, xScale - 0, zScale - 0);       
+
+        public void drawEmpty(int x, int y) {
+            Color color = new Color(255,255,255);
+            g.setColor(color);
+                g.fillRect(100 + (x * xScale), y * yScale, xScale - 0, yScale - 0);
+            //g.fillRect(400 + (x * xScale), z * zScale, xScale - 0, zScale - 0);       
+        }
+
+        public void paintComponent(Graphics g) {
+            if (systemFront != null) {
+                g.drawImage(systemFront, 0, 50, null);
+                //g.drawImage(underLine, 50, 355, null);
+                //g.drawImage(yLine, 25, 50, null);
+                System.out.println("dsf");
             }
-            
-         public void paintComponent(Graphics g) {
-            if (systemFront != null && systemAbove != null) {
-                    g.drawImage(systemFront, 0, 50, null);
-                    g.drawImage(underLine, 50, 355, null);
-                    g.drawImage(underLine, 400, 355, null);
-                    g.drawImage(yLine, 25, 50, null);
-                    g.drawImage(zLine, 375, 50, null);
-                    
-            }
+            System.out.println("dsf");
         }
     }
 }

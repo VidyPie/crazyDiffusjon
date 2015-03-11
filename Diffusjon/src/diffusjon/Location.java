@@ -11,12 +11,10 @@ public class Location
 
     private int x;
     private int y;
-    private int z;
 
-    public Location(int x, int y, int z)
+    public Location(int x, int y)
     {
         this.x = x;
-        this.z = z;
         this.y = y;
     }
     
@@ -26,7 +24,7 @@ public class Location
      */
     public String toString()
     {
-        return x + "," + y + "," + z;
+        return x + "," + y;
     }
    
     
@@ -43,10 +41,6 @@ public class Location
         return y;
     }
     
-    public int getZ()
-    {
-        return z;
-    }
     
     public void setX(int newX) {
         x = newX;
@@ -56,7 +50,4 @@ public class Location
         y = newY;
     }
     
-    public void setZ(int newZ) {
-        z = newZ;
-    }
 }

@@ -16,10 +16,8 @@ public class Particle {
     int getOldX;
     int getOldY;
     int getOldZ;
-    private int colorIdentifier;
-    public Particle(ParticleSystem system, Location location, int n) {
+    public Particle(ParticleSystem system, Location location) {
         this.system = system;
-        this.colorIdentifier = n;
         setLocation(location);           
     }
     
@@ -40,7 +38,6 @@ public class Particle {
         oldX = location.getX();
         oldY = location.getY();
         
-        oldZ = location.getZ();
         setLocation(newLocation);
     }
     
@@ -54,8 +51,8 @@ public class Particle {
         } else {
             x = x + 1;
         }
-        if(x > 59) {
-            x = 59;
+        if(x > 239) {
+            x = 239;
         }
         if (x < 0) {
             x = 0;
@@ -70,10 +67,10 @@ public class Particle {
         if (y <= 0) {
             y = 0;
         }
-        if(y >= 59) {
-            y = 59;
+        if(y >= 239) {
+            y = 239;
         }
-        Location newLocation = new Location(x, y, location.getZ());
+        Location newLocation = new Location(x, y);
         setLocation(newLocation);
     
     }
@@ -90,8 +87,5 @@ public class Particle {
     public int getOldZ() {
         return oldZ;
     }
-    
-    public int getColorIdentifier() {
-        return colorIdentifier;
-    }
+   
 }

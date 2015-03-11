@@ -37,8 +37,8 @@ public class Simulator {
     public Simulator() {
         particles = new ArrayList<Particle>();
         view = new SimulatorView();
-        view.setSize(900, 440);
-        system = new ParticleSystem(60, 60, 60);
+        view.setSize(900, 640);
+        system = new ParticleSystem(240, 240);
         simState = SimState.READY;
         reset();
         layoutMenu();
@@ -158,7 +158,7 @@ public class Simulator {
     public void reset() {
         step = 1;
         particles.clear();
-        populate(40, 50, 10);
+        populate(40, 50);
         view.prepareSystem(step, system);
         view.showStatus(step, system);
     }
@@ -167,17 +167,16 @@ public class Simulator {
         System.exit(0);
     }
     
-    private void populate(int x, int y, int z) {
+    private void populate(int x, int y) {
         system.clear();
         int t = 0;
         int n = 0;
         Random r = new Random();
-        while(t < 50) {
+        while(t < 500) {
             int ax = r.nextInt(59);
             int ay = r.nextInt(59);
-            int az = r.nextInt(59);
-            Location location = new Location(30, 30, 30);
-            Particle particle = new Particle(system, location, n);
+            Location location = new Location(120, 120);
+            Particle particle = new Particle(system, location);
             particles.add(particle);
             t++;
             n++;

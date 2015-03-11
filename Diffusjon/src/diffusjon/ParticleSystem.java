@@ -15,51 +15,50 @@ import java.util.Random;
  */
 public class ParticleSystem
 {
-    private int xsize, ysize, zsize;
-    private Particle[][][] system;
+    private int xsize, ysize;
+    private Particle[][] system;
 
-    public ParticleSystem(int x, int y, int z)
+    public ParticleSystem(int x, int y)
     {
         this.xsize = x;
         this.ysize = y;
-        this.zsize = z;
         HashMap<Location, Particle> p;
-        system = new Particle[x][y][z];
+        system = new Particle[x][y];
     }
     
     public void clear()
     {
         for(int ax = 0; ax < xsize; ax++) {
             for(int ay = 0; ay < ysize; ay++) {
-                for(int az = 0; az < zsize; az++) {
-                    system[ax][ay][az] = null;
-                }
+
+                    system[ax][ay] = null;
+                
             }
         }
     }
 
     public void clear(Location location)
     {
-        system[location.getX()][location.getY()][location.getZ()] = null;
+        system[location.getX()][location.getY()] = null;
     }
     
-    public void place(Particle particle, int x, int y, int z)
+    public void place(Particle particle, int x, int y)
     {
-        place(particle, new Location(x, y, z));
+        place(particle, new Location(x, y));
     }
  
     public void place(Particle particle, Location location) {
-            system[location.getX()][location.getY()][location.getZ()] = particle;
+            system[location.getX()][location.getY()] = particle;
     }
 
     public Particle getObjectAt(Location location)
     {
-        return getObjectAt(location.getX(), location.getY(), location.getZ());
+        return getObjectAt(location.getX(), location.getY());
     }
 
-    public Particle getObjectAt(int x, int y, int z)
+    public Particle getObjectAt(int x, int y)
     {
-        return system[x][y][z];
+        return system[x][y];
     }
 
     public Location randomAdjacentLocation(Location location)
@@ -103,20 +102,15 @@ public class ParticleSystem
         if(location != null) {
             int x = location.getX();
             int y = location.getY();
-            int z = location.getZ();
             for(int xoffset = -1; xoffset <= 1; xoffset++) {
                 int nextX = x + xoffset;
                 if(nextX >= 0 && nextX < xsize) {
                     for(int yoffset = -1; yoffset <= 1; yoffset++) {
                         int nextY = y + yoffset;
                         if(nextY >= 0 && nextY < ysize) {
-                            for(int zoffset = -1; zoffset <= 1; zoffset++) {
-                                int nextZ = z + zoffset;
-                            //int nextZ = 0;
-                                if(nextZ >= 0 && nextZ < zsize) {
-                                    locations.add(new Location(nextX, nextY, nextZ));
-                                }
-                            }
+                                    locations.add(new Location(nextX, nextY));
+                                
+                            
                         }
                     }
                 }
@@ -135,8 +129,4 @@ public class ParticleSystem
         return ysize;
     }
     
-    public int getZ()
-    {
-        return zsize;
-    }
 }
