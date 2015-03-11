@@ -101,6 +101,20 @@ public class SimulatorView extends JFrame {
                 loco.drawVisitedMark(location.getX(), location.getY());
             }
         }
+        if(stateConst == 3) {
+            for (int ax = 0; ax < system.getX(); ax++) {
+                for (int ay = 0; ay < system.getY(); ay++) {
+                    Particle particle = system.getObjectAt(ax, ay);
+                    if (particle == null) {
+                        loco.drawEmpty(ax, ay);
+                    } else {
+                        loco.drawMark(ax, ay);
+                        Location location = new Location(ax, ay);
+                        visitedLocations.add(location);
+                    }
+                }
+            }
+        }
         repaint();
     }
 

@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 public class Simulator {
 
     private ArrayList<Particle> particles;
+    private ArrayList<Location> locations;
     private SimulatorView view;
     private ParticleSystem system;
     private int step = 1;
@@ -41,13 +42,26 @@ public class Simulator {
 
     public Simulator() {
         particles = new ArrayList<Particle>();
+        locations = new ArrayList<Location>();
         view = new SimulatorView();
         view.setSize(900, 640);
         system = new ParticleSystem(128, 128);
         simState = SimState.WAITING;
+        fillLocations();
         reset();
         layoutMenu();
         simLoop();
+    }
+
+    private void fillLocations() {
+        for (int x = 0; x <= 128; x++) {
+            for (int y = 0; y <= 128; y++) {
+                Location location = new Location(x, y);
+                List<Location> adjacentLocations = system.adjacentLocations(location);
+                location.addList(adjacentLocations);
+                locations.add(location);
+            }
+        }
     }
 
     private void simLoop() {
@@ -113,6 +127,14 @@ public class Simulator {
         view.prepareSystem(step, system);
         view.showStatus(step, system, stateConst);
         step++;
+    }
+
+    private void cellularSimulationOneStep() {
+        for (Iterator<Location> it = locations.iterator(); it.hasNext();) {
+            Location location = it.next();
+            location.steinLoop();
+        }
+
     }
 
     private void stop() {
